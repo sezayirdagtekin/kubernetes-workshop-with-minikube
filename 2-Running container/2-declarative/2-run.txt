@@ -1,0 +1,9 @@
+
+PS D:\test\kubernetes\2-Running container> kubectl apply -f web-declarative.yaml
+pod/web-declarative created
+
+
+PS D:\test\kubernetes\2-Running container> kubectl get pods
+NAME              READY   STATUS    RESTARTS   AGE
+web               1/1     Running   0          178m
+web-declarative   1/1     Running   0          2m9s

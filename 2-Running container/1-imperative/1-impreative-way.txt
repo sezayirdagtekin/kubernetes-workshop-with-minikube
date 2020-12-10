@@ -1,0 +1,25 @@
+
+PS D:\test\kubernetes> kubectl run --image nginx  web
+pod/web created
+
+PS D:\test\kubernetes> kubectl get pods
+NAME   READY   STATUS    RESTARTS   AGE
+web    1/1     Running   0          42s
+
+
+
+PS D:\test\kubernetes> kubectl describe pod web
+Name:         web
+Namespace:    default
+Priority:     0
+Node:         minikube/192.168.49.2
+Start Time:   Thu, 10 Dec 2020 10:53:38 +0300
+Labels:       run=web
+Annotations:  <none>
+Status:       Running
+IP:           172.17.0.3
+IPs:
+  IP:  172.17.0.3
+Containers:
+  web:
+  ....
