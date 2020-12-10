@@ -1,0 +1,17 @@
+
+> kubectl delete all --all
+pod "web-declarative" deleted
+service "mynginx" deleted
+
+> kubectl apply -f pod.yaml
+pod/web-pod created
+
+> kubectl apply -f service.yml
+service/nginx-service created
+
+
+> kubectl get services
+NAME            TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+kubernetes      ClusterIP   10.96.0.1       <none>        443/TCP   13m
+nginx-service   ClusterIP   10.103.33.248   <none>        80/TCP    47s
+

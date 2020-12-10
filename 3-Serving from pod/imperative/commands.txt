@@ -1,0 +1,16 @@
+> kubectl apply -f pod.yaml
+pod/web-pod created
+
+> kubectl get pods
+NAME      READY   STATUS    RESTARTS   AGE
+web-pod   1/1     Running   0          61s
+
+> kubectl expose pod web-pod --port 8080  --name myservice
+service/myservice exposed
+
+
+> kubectl get services
+NAME         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+kubernetes   ClusterIP   10.96.0.1        <none>        443/TCP    5m29s
+myservice    ClusterIP   10.109.120.220   <none>        8080/TCP   48s
+web-pod      ClusterIP   10.110.107.209   <none>        8080/TCP   65s
