@@ -1,0 +1,44 @@
+PS D:\kubernetes> kubectl get pods
+NAME      READY   STATUS    RESTARTS   AGE
+blue      1/1     Running   0          30m
+green     1/1     Running   0          30m
+nginx     1/1     Running   0          30m
+web-pod   1/1     Running   2          17h
+
+PS D:\kubernetes> kubectl get pod
+NAME      READY   STATUS    RESTARTS   AGE
+blue      1/1     Running   0          30m
+green     1/1     Running   0          30m
+nginx     1/1     Running   0          30m
+web-pod   1/1     Running   2          17h
+
+PS D:\kubernetes> kubectl get pod blue
+NAME   READY   STATUS    RESTARTS   AGE
+blue   1/1     Running   0          30m
+PS D:\kubernetes>
+
+# More information
+PS D:\kubernetes> kubectl get pod  blue -o yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  ....
+  
+ PS D:\kubernetes> kubectl explain pod
+KIND:     Pod
+VERSION:  v1
+...
+
+
+PS D:\kubernetes> kubectl explain pod.kind
+KIND:     Pod
+VERSION:  v1
+
+FIELD:    kind <string>
+
+DESCRIPTION:
+     Kind is a string value representing the REST resource this object
+     represents. Servers may infer this from the endpoint the client submits
+     requests to. Cannot be updated. In CamelCase. More info:
+     https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+PS D:\kubernetes> 
