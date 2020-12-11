@@ -1,0 +1,17 @@
+>kubectl top pods
+error: Metrics API not available
+
+#Enabled metrics-server
+
+>minikube addons enable metrics-server
+! Executing "docker container inspect minikube --format={{.State.Status}}" took an unusually long time: 3.2297566s
+* Restarting the docker service may improve performance.
+* The 'metrics-server' addon is enabled
+
+>kubectl top  nodes
+NAME       CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%
+minikube   515m         6%     1075Mi          17%
+
+>kubectl top pods
+W1211 14:24:17.930685   10864 top_pod.go:265] Metrics not available for pod default/blue, age: 2h46m38.9306855s
+error: Metrics not available for pod default/blue, age: 2h46m38.9306855s
