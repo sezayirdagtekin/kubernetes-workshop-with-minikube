@@ -1,0 +1,22 @@
+
+> kubectl apply -f .
+pod/blue created
+pod/green created
+pod/web created
+
+> kubectl port-forward  blue 8080:8080
+Forwarding from 127.0.0.1:8080 -> 8080
+Forwarding from [::1]:8080 -> 8080
+
+#great it works
+http://localhost:8080/  
+
+>kubectl logs blue
+[blue] Listening on V4(0.0.0.0:8080)
+[blue] Request(GET / from 127.0.0.1:56894)
+[blue] Request(GET /favicon.ico from 127.0.0.1:56894)
+
+>kubectl logs -l app=blue-green
+[blue] Listening on V4(0.0.0.0:8080)
+[blue] Request(GET / from 127.0.0.1:56894)
+
