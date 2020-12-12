@@ -1,0 +1,33 @@
+> kubectl apply -f blue-green.yaml
+deployment.apps/blue-green created
+
+> kubectl get deployments
+NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+blue-green   1/1     1            1           107s
+
+> kubectl get pods
+NAME                          READY   STATUS    RESTARTS   AGE
+blue-green-7f767c596b-ccf7b   1/1     Running   0          9s
+
+#change   replicas: 3
+
+> kubectl apply -f blue-green.yaml
+deployment.apps/blue-green configured
+
+> kubectl get pods
+NAME                          READY   STATUS              RESTARTS   AGE
+blue-green-7f767c596b-ccf7b   1/1     Running             0          2m32s
+blue-green-7f767c596b-j7szx   0/1     ContainerCreating   0          6s
+blue-green-7f767c596b-ng656   0/1     ContainerCreating   0          6s
+
+#check again .now all pods are created
+> kubectl get pods
+NAME                          READY   STATUS    RESTARTS   AGE
+blue-green-7f767c596b-ccf7b   1/1     Running   0          3m34s
+blue-green-7f767c596b-j7szx   1/1     Running   0          68s
+blue-green-7f767c596b-ng656   1/1     Running   0          68s
+
+> kubectl get deployments
+NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+blue-green   3/3     3            3           3m16s
+
