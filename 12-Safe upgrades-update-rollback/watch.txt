@@ -1,0 +1,65 @@
+
+> kubectl apply -f blue-green.yaml
+deployment.apps/blue-green created
+PS D:\kubernetes\12-Safe upgrades-update-rollback>  kubectl get pods --watch
+NAME                         READY   STATUS              RESTARTS   AGE
+blue-green-79b56fc88-2spg4   0/1     ContainerCreating   0          4s
+blue-green-79b56fc88-5htbt   0/1     Pending             0          4s
+blue-green-79b56fc88-7hmrb   0/1     Pending             0          4s
+blue-green-79b56fc88-8x85s   0/1     Pending             0          4s
+blue-green-79b56fc88-bkmdl   0/1     ContainerCreating   0          4s
+blue-green-79b56fc88-bkx45   0/1     ContainerCreating   0          4s
+blue-green-79b56fc88-cs4x8   0/1     Pending             0          4s
+blue-green-79b56fc88-dht92   0/1     Pending             0          4s
+blue-green-79b56fc88-kjlfv   0/1     ContainerCreating   0          4s
+blue-green-79b56fc88-p5txv   0/1     ContainerCreating   0          5s
+blue-green-79b56fc88-5htbt   0/1     ContainerCreating   0          4s
+blue-green-79b56fc88-8x85s   0/1     ContainerCreating   0          5s
+blue-green-79b56fc88-cs4x8   0/1     ContainerCreating   0          6s
+blue-green-79b56fc88-dht92   0/1     ContainerCreating   0          6s
+blue-green-79b56fc88-7hmrb   0/1     ContainerCreating   0          7s
+
+-> kubectl get pods --watch
+NAME                         READY   STATUS    RESTARTS   AGE
+blue-green-79b56fc88-2spg4   1/1     Running   0          55s
+blue-green-79b56fc88-5htbt   1/1     Running   0          55s
+blue-green-79b56fc88-7hmrb   1/1     Running   0          55s
+blue-green-79b56fc88-8x85s   1/1     Running   0          55s
+blue-green-79b56fc88-bkmdl   1/1     Running   0          55s
+blue-green-79b56fc88-bkx45   1/1     Running   0          55s
+blue-green-79b56fc88-cs4x8   1/1     Running   0          55s
+blue-green-79b56fc88-dht92   1/1     Running   0          55s
+blue-green-79b56fc88-kjlfv   1/1     Running   0          55s
+blue-green-79b56fc88-p5txv   1/1     Running   0          56s
+
+---------------------------------------------------------------------------
+ chnage image blue to green         image: mtinside/blue-green:green
+----------------------------------------------------------------------------
+
+> kubectl apply -f blue-green.yaml
+deployment.apps/blue-green configured
+
+PS D:\kubernetes\12-Safe upgrades-update-rollback>  kubectl get pods --watch
+NAME                         READY   STATUS    RESTARTS   AGE
+blue-green-79b56fc88-2spg4   1/1     Running   0          3m56s
+blue-green-79b56fc88-5htbt   1/1     Running   0          3m56s
+blue-green-79b56fc88-7hmrb   1/1     Running   0          3m56s
+blue-green-79b56fc88-8x85s   1/1     Running   0          3m56s
+blue-green-79b56fc88-bkmdl   1/1     Running   0          3m56s
+blue-green-79b56fc88-bkx45   1/1     Running   0          3m56s
+blue-green-79b56fc88-cs4x8   1/1     Running   0          3m56s
+blue-green-79b56fc88-dht92   1/1     Running   0          3m56s
+blue-green-79b56fc88-kjlfv   1/1     Running   0          3m56s
+blue-green-79b56fc88-p5txv   1/1     Running   0          3m57s
+blue-green-db4dd8dc5-2kf29   0/1     Running   0          10s
+blue-green-db4dd8dc5-2kf29   1/1     Running   0          14s
+blue-green-79b56fc88-7hmrb   1/1     Terminating   0          4m
+blue-green-db4dd8dc5-2px6d   0/1     Pending       0          0s
+blue-green-db4dd8dc5-2px6d   0/1     Pending       0          0s
+blue-green-db4dd8dc5-2px6d   0/1     ContainerCreating   0          0s
+blue-green-db4dd8dc5-2px6d   0/1     Running             0          9s
+blue-green-db4dd8dc5-2px6d   1/1     Running             0          14s
+blue-green-79b56fc88-dht92   1/1     Terminating         0          4m15s
+blue-green-db4dd8dc5-4ls7c   0/1     Pending             0          0s
+blue-green-db4dd8dc5-4ls7c   0/1     Pending             0          1s
+blue-green-db4dd8dc5-4ls7c   0/1     ContainerCreating   0          1s
