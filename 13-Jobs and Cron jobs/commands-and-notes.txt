@@ -1,0 +1,85 @@
+
+> kubectl api-resources | findstr batch
+cronjobs                          cj           batch/v1beta1                     true         CronJob
+jobs                                           batch/v1                          true         Job
+
+ > kubectl apply -f blue.yaml
+pod/blue created
+ > kubectl apply -f blue-green.yaml
+service/blue-green created
+
+ > kubectl apply -f pod.yaml
+pod/fetch created
+ >  kubectl get pods --watch
+NAME    READY   STATUS              RESTARTS   AGE
+blue    1/1     Running             0          3m2s
+fetch   0/1     ContainerCreating   0          7s
+fetch   0/1     Completed           0          14s
+fetch   0/1     Completed           1          22s
+fetch   0/1     CrashLoopBackOff    1          22s
+fetch   0/1     Completed           2          43s
+fetch   0/1     CrashLoopBackOff    2          44s
+
+ > kubectl delete -f pod.yaml
+pod "fetch" deleted
+ >  kubectl get pods
+NAME   READY   STATUS    RESTARTS   AGE
+blue   1/1     Running   0          6m53s
+
+
+------------------------------------------------------------------
+Prevent restar again and again with JOB
+------------------------------------------------------------------
+
+ >  kubectl apply -f job.yaml
+job.batch/fetch created
+
+ >  kubectl   get job
+NAME    COMPLETIONS   DURATION   AGE
+
+fetch   1/1           13s        45s
+ >  kubectl   get pods
+NAME          READY   STATUS      RESTARTS   AGE
+blue          1/1     Running     0          21m
+fetch-bfsts   0/1     Completed   0          52s
+
+ > kubectl logs fetch-bfsts
+Connecting to blue-green (10.98.151.247:80)
+saving to 'index.html'
+index.html           100% |********************************|   114  0:00:00 ETA
+'index.html' saved
+ >
+
+
+ >  kubectl   delete -f job.yaml
+job.batch "fetch" deleted
+ >
+
+
+-------------------------------------------------------------------------------
+CRON Jobs
+-------------------------------------------------------------------------------
+
+
+ > kubectl apply -f cronjob.yaml
+cronjob.batch/hello created
+ > kubectl get cronjob hello
+NAME    SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+hello   */1 * * * *   False     0        <none>          14s
+ > kubectl get jobs --watch
+NAME               COMPLETIONS   DURATION   AGE
+hello-1607851620   0/1                      0s
+hello-1607851620   0/1           1s         1s
+hello-1607851620   1/1           14s        14s
+ > kubectl get cronjob hello
+NAME    SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+hello   */1 * * * *   False     0        33s             55s
+
+
+kubectl delete cronjob hello
+
+
+moret information is
+
+https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/
+
