@@ -1,0 +1,24 @@
+
+> kubectl apply -f liveness-probe.yaml
+pod/liveness-http created
+ > kubectl get pods
+NAME            READY   STATUS              RESTARTS   AGE
+liveness-http   0/1     ContainerCreating   0          7s
+ > kubectl get pods
+NAME            READY   STATUS    RESTARTS   AGE
+liveness-http   1/1     Running   0          12s
+
+
+
+
+> kubectl describe pod liveness-http
+
+  Normal   Scheduled  4m34s                  default-scheduler  Successfully assigned default/liveness-http to minikube
+  Normal   Pulled     4m28s                  kubelet            Successfully pulled image "k8s.gcr.io/liveness" in 2.7060402s
+  Normal   Pulled     4m5s                   kubelet            Successfully pulled image "k8s.gcr.io/liveness" in 1.2101834s
+  Normal   Pulled     3m43s                  kubelet            Successfully pulled image "k8s.gcr.io/liveness" in 1.4487936s
+  Normal   Created    3m42s (x3 over 4m26s)  kubelet            Created container liveness
+  Normal   Started    3m41s (x3 over 4m26s)  kubelet            Started container liveness
+  Warning  Unhealthy  3m25s (x9 over 4m13s)  kubelet            Liveness probe failed: HTTP probe failed with statuscode: 500
+  Normal   Killing    3m25s (x3 over 4m7s)   kubelet            Container liveness failed liveness probe, will be restarted
+  Normal   Pulling    3m24s (x4 over 4m31s)  kubelet            Pulling image "k8s.gcr.io/liveness"

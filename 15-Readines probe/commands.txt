@@ -1,0 +1,18 @@
+PS D:\kubernetes\15-Readines probe> kubectl apply -f readiness-probe.yaml
+deployment.apps/envbin created
+PS D:\kubernetes\15-Readines probe> kubectl get pods
+NAME                      READY   STATUS              RESTARTS   AGE
+envbin-59db7d7b9b-q47hx   0/1     ContainerCreating   0          8s
+PS D:\kubernetes\15-Readines probe> kubectl get pods
+
+> kubectl describe pod envbin-59db7d7b9b-q47hx
+
+Events:
+  Type     Reason     Age                 From               Message
+  ----     ------     ----                ----               -------
+  Normal   Scheduled  85s                 default-scheduler  Successfully assigned default/envbin-59db7d7b9b-q47hx to minikube
+  Normal   Pulling    81s                 kubelet            Pulling image "mtinside/envbin:latest"
+  Normal   Pulled     79s                 kubelet            Successfully pulled image "mtinside/envbin:latest" in 1.8294857s
+  Normal   Created    78s                 kubelet            Created container envbin
+  Normal   Started    77s                 kubelet            Started container envbin
+  Warning  Unhealthy  56s (x21 over 76s)  kubelet            Readiness probe failed: HTTP probe failed with statuscode: 404
