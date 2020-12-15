@@ -1,0 +1,41 @@
+PS D:\kubernetes\16-Managing request and limit> kubectl apply -f web.yaml
+pod/web created
+PS D:\kubernetes\16-Managing request and limit>
+
+
+PS D:\kubernetes\16-Managing request and limit> kubectl get nodes
+NAME       STATUS   ROLES    AGE   VERSION
+minikube   Ready    master   5d    v1.19.4
+
+> kubectl describe node minikube
+...
+
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests    Limits
+  --------           --------    ------
+  cpu                750m (9%)   1 (12%)
+  memory             134Mi (2%)  682Mi (11%)
+  ephemeral-storage  0 (0%)      0 (0%)
+  hugepages-2Mi      0 (0%)      0 (0%)
+  
+  
+  
+  
+  
+  
+  Addresses:
+  InternalIP:  192.168.49.2
+  Hostname:    minikube
+Capacity:
+  cpu:                8
+  ephemeral-storage:  263174212Ki
+  hugepages-2Mi:      0
+  memory:             6255968Ki
+  pods:               110
+Allocatable:
+  cpu:                8
+  ephemeral-storage:  263174212Ki
+  hugepages-2Mi:      0
+  memory:             6255968Ki
+  pods:               110
