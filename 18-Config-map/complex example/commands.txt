@@ -1,0 +1,34 @@
+
+ > ls
+
+Mode                 LastWriteTime         Length Name
+	----                 -------------         ------ ----
+	-a----        10.12.2020     09:24             84 colour-configmap.yaml
+	-a----        19.12.2020     12:40             90 index.html
+	-a----        10.12.2020     09:24            267 pink.yaml
+	-a----        10.12.2020     09:24            280 web.yaml
+
+
+ > kubectl create configmap website  --from-file=index.html --dry-run=client -o yaml > website.yaml
+
+ > ls
+	Mode                 LastWriteTime         Length Name
+	----                 -------------         ------ ----
+	-a----        10.12.2020     09:24             84 colour-configmap.yaml
+	-a----        19.12.2020     12:40             90 index.html
+	-a----        10.12.2020     09:24            267 pink.yaml
+	-a----        10.12.2020     09:24            280 web.yaml
+	-a----        19.12.2020     12:46            466 website.yaml
+
+
+ > kubectl apply -f website.yaml
+    configmap/website created
+ > kubectl apply -f web.yaml
+    pod/web created
+
+ > kubectl get pods
+NAME   READY   STATUS    RESTARTS   AGE
+web    1/1     Running   0          3m14s
+
+
+  http://localhost:8080/

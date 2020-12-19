@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+spec:
+  containers:
+    - name: mypod
+      image: mtinside/blue-green:blue
+      env:
+        - name: COLOUR
+          valueFrom:
+            configMapKeyRef:
+              name: color-config
+              key: color
