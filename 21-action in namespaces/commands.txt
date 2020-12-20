@@ -1,0 +1,111 @@
+
+
+# In a namespace
+kubectl api-resources --namespaced=true
+
+# Not in a namespace
+kubectl api-resources --namespaced=false
+
+
+#create first namespace
+PS D:\kubernetes\21-action in namespaces> kubectl create namespace team1
+namespace/team1 created
+
+PS D:\kubernetes\21-action in namespaces> kubectl config set-context --current --namespace=team1
+Context "minikube" modified.
+
+
+PS D:\kubernetes\21-action in namespaces> kubectl apply -f envbin.yaml
+deployment.apps/envbin created
+service/envbin created
+
+PS D:\kubernetes\21-action in namespaces> kubectl apply -f shell.yaml
+pod/shell created
+
+#create second namespace
+PS D:\kubernetes\21-action in namespaces> kubectl create namespace team2
+namespace/team2 created
+
+
+
+-----------------------------------------------------------------------------------------------------------------------
+#INSTALL
+Kubectx is helpful for multi-cluster installations, where you need to switch context between one cluster and another.
+Rather than type a series of lengthy kubectl command, kubectx works it magic in one short command.
+
+https://developers.redhat.com/blog/2019/05/27/command-line-tools-for-kubernetes-kubectl-stern-kubectx-kubens/
+
+# Run as adminstirator
+PS D:\kubernetes\21-action in namespaces> choco install kubernetes-cli
+------------------------------------------------------------------------------------------------------------------------
+
+
+PS D:\kubernetes\21-action in namespaces> kubectl config set-context --current --namespace=team2
+# Validate it
+PS D:\kubernetes\21-action in namespaces> kubectl config view --minify | findStr namespace:
+    namespace: team2
+	
+	
+PS D:\kubernetes\21-action in namespaces> kubectl get all
+No resources found in team2 namespace.
+
+PS D:\kubernetes\21-action in namespaces> kubectl apply -f envbin.yaml
+deployment.apps/envbin created
+service/envbin created
+PS D:\kubernetes\21-action in namespaces> kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+envbin-565b8c6d85-66sw5   1/1     Running   0          80s
+PS D:\kubernetes\21-action in namespaces>
+
+
+# get pods in namespace team1
+PS D:\kubernetes\21-action in namespaces> kubectl get pods -n=team1
+NAME                      READY   STATUS    RESTARTS   AGE
+envbin-565b8c6d85-hh5ds   1/1     Running   0          30m
+shell                     1/1     Running   0          30m
+PS D:\kubernetes\21-action in namespaces>
+
+
+
+PS D:\kubernetes\21-action in namespaces> kubectl exec -n team1 -ti shell -- /bin/sh
+/ # apk update
+...
+OK: 12745 distinct packages available
+/ #
+
+/ # apk add curl
+...
+OK: 7 MiB
+/ #
+
+---------------------------------------------------------
+look namespace it dpsilay team1
+
+/ # curl envbin  or / # curl envbin.team1
+...
+KUBERNETES
+Present: yes
+Version: v1.19.4 linux/amd64
+Running in namespace team1
+As ServiceAccount: default
+This Pod:
+  Containers: forbidden
+  Images: <no value>
+Nodes: forbidden
+This Node:
+  Address: <no value>
+  
+  
+  ------------------------------------------------------
+  
+  NAMESPACE TEAM2
+  
+  # curl envbin.team2
+  ....
+  KUBERNETES
+Present: yes
+Version: v1.19.4 linux/amd64
+Running in namespace team2
+As ServiceAccount: default
+  Version: <no value>
+  OS: <no value>
