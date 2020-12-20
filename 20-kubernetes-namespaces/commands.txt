@@ -1,0 +1,55 @@
+
+#Viewing namespaces
+#You can list the current namespaces in a cluster using:
+
+PS D:\kubernetes\18-Config-map\complex example> kubectl get namespaces
+NAME              STATUS   AGE
+default           Active   22h
+kube-node-lease   Active   22h
+kube-public       Active   22h
+kube-system       Active   22h
+PS D:\kubernetes\18-Config-map\complex example>
+
+
+
+#Kubernetes starts with four initial namespaces:
+
+#default:        The default namespace for objects with no other namespace
+#kube-system :   The namespace for objects created by the Kubernetes system
+#kube-public :   This namespace is created automatically and is readable by all users (including those not authenticated). 
+                 This namespace is mostly reserved for cluster usage, in case that some resources should be visible and readable 
+				 publicly throughout the whole cluster. The public aspect of this namespace is only a convention, not a requirement.
+#kube-node-lease:This namespace for the lease objects ass
+
+
+PS D:\kubernetes\18-Config-map\complex example> kubectl get pods
+NAME   READY   STATUS    RESTARTS   AGE
+web    1/1     Running   1          22h
+
+
+
+PS D:\kubernetes\18-Config-map\complex example> kubectl get pods --all-namespaces
+NAMESPACE     NAME                               READY   STATUS    RESTARTS   AGE
+default       web                                1/1     Running   1          22h
+kube-system   coredns-f9fd979d6-9b9dt            1/1     Running   1          22h
+kube-system   etcd-minikube                      1/1     Running   1          22h
+kube-system   kube-apiserver-minikube            1/1     Running   1          22h
+kube-system   kube-controller-manager-minikube   1/1     Running   2          22h
+kube-system   kube-proxy-xsndz                   1/1     Running   1          22h
+kube-system   kube-scheduler-minikube            1/1     Running   1          22h
+kube-system   storage-provisioner                1/1     Running   2          22h
+
+
+#some reosurces are not in the namespace .  true  mean in namespace
+PS D:\kubernetes\18-Config-map\complex example> kubectl api-resources
+NAME                              SHORTNAMES   APIVERSION                        NAMESPACED   KIND
+bindings                                       v1                                true         Binding
+componentstatuses                 cs           v1                                false        ComponentStatus
+configmaps                        cm           v1                                true         ConfigMap
+endpoints                         ep           v1                                true         Endpoints
+events                            ev           v1                                true         Event
+limitranges                       limits       v1                                true         LimitRange
+namespaces                        ns           v1                                false        Namespace
+nodes                             no           v1                                false        Node
+persistentvolumeclaims            pvc          v1                                true         PersistentVolumeClaim
+persistentvolumes                 pv           v1                                false        PersistentVolume
