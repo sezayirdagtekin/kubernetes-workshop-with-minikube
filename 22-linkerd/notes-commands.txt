@@ -1,0 +1,69 @@
+> kubectl version --short
+	Client Version: v1.20.0
+	Server Version: v1.19.4
+
+#INSTALL LINKERD
+  choco install linkerd2
+
+> linkerd version
+	Client version: stable-2.9.0
+	Server version: unavailable
+
+#: Validate your Kubernetes clusteR
+linkerd check --pre
+
+#Install Linkerd onto the cluster
+#The linkerd install command generates a Kubernetes manifest with all the necessary control plane resources. 
+#(You can inspect the output if desired!). Piping this manifest into kubectl apply will instruct Kubernetes to add those resources to your cluster.
+#Depending on the speed of your cluster's Internet connection, it may take a minute or two for your cluster to pull the Linkerd images. 
+#While that is happening, we can validate the installation by running:
+
+> linkerd install | kubectl apply -f -
+
+# This command will patiently wait until Linkerd has been installed, is running and becomes healthy.
+>  linkerd check
+	.....
+
+	linkerd-prometheus
+	------------------
+	√ prometheus add-on service account exists
+	√ prometheus add-on config map exists
+	√ prometheus pod is running
+
+	linkerd-grafana
+	---------------
+	√ grafana add-on service account exists
+	√ grafana add-on config map exists
+	√ grafana pod is running
+
+    Status check results are √
+	
+	
+> kubectl get pods -n linkerd
+NAME                                      READY   STATUS    RESTARTS   AGE
+	linkerd-controller-c986f9b8b-qb2tz        2/2     Running   0          8m24s
+	linkerd-destination-7b78bd75b4-lqdnq      2/2     Running   0          8m21s
+	linkerd-grafana-7957544fc8-gdt92          2/2     Running   1          8m7s
+	linkerd-identity-6f8f599bd-qltv7          2/2     Running   0          8m26s
+	linkerd-prometheus-d47f97d6c-9tp86        2/2     Running   0          8m2s
+	linkerd-proxy-injector-744c577bd6-bjhxx   2/2     Running   0          8m18s
+	linkerd-sp-validator-64767c7755-r69tx     2/2     Running   0          8m14s
+	linkerd-tap-858b6cf56-czdgg               2/2     Running   0          8m11s
+	linkerd-web-6768555d5c-dqvn2              2/2     Running   0          8m18s
+
+but in deafult namespace
+ > kubectl get pods
+   No resources found in default namespace.
+   
+   
+   
+#With the control plane installed and running, you can now view the Linkerd dashboard by running:
+
+> linkerd dashboard
+Linkerd dashboard available at:
+http://localhost:50750
+Grafana dashboard available at:
+http://localhost:50750/grafana
+Opening Linkerd dashboard in the default browser
+
+
