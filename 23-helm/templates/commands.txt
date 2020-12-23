@@ -1,0 +1,107 @@
+
+#INSTALL HELM
+https://helm.sh/docs/intro/install/
+
+choco install kubernetes-helm
+
+> helm version
+version.BuildInfo{Version:"v3.4.2", GitCommit:"23dd3af5e19a02d4f4baa5b2f242645a1a3af629", GitTreeState:"clean", GoVersion:"go1.14.13"}
+
+
+> helm template -f values-dev.yaml .
+
+---
+# Source: blue-green/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+...
+kind: Deployment
+metadata:
+  name: blue-green
+
+---
+# Source: blue-green/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: blue-green
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: dev.example.com
+...
+
+
+
+#Aply to our cluster
+
+> helm install -f  values-dev.yaml  blue-green .
+
+	NAME: blue-green
+	LAST DEPLOYED: Wed Dec 23 16:20:07 2020
+	NAMESPACE: default
+	STATUS: deployed
+	REVISION: 1
+	TEST SUITE: None
+>  kubectl get pods
+	NAME                         READY   STATUS    RESTARTS   AGE
+	blue-green-bf875cf47-sqxmb   1/1     Running   0          34s
+> kubectl get  services
+	NAME         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+	blue-green   NodePort    10.101.215.147   <none>        80:32624/TCP   43s
+	kubernetes   ClusterIP   10.96.0.1        <none>        443/TCP        3d3h
+	
+	
+--------------------------------------------------------------------------------------
+
+#chnage deployment yaml       
+ image: mtinside/blue-green:green to      image: mtinside/blue-green:blue
+#REVISION 2 now
+PS D:\kubernetes\23-helm> helm upgrade -f  values-dev.yaml  blue-green .
+	Release "blue-green" has been upgraded. Happy Helming!
+	NAME: blue-green
+	LAST DEPLOYED: Wed Dec 23 16:25:12 2020
+	NAMESPACE: default
+	STATUS: deployed
+	REVISION: 2
+	TEST SUITE: None
+
+
+PS D:\kubernetes\23-helm> helm history blue-green
+	REVISION        UPDATED                         STATUS          CHART                   APP VERSION     DESCRIPTION
+	1               Wed Dec 23 16:20:07 2020        superseded      blue-green-1.0.0                        Install complete
+	2               Wed Dec 23 16:25:12 2020        deployed        blue-green-1.0.0                        Upgrade complete
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------
+
+> helm  template -f  values-prod.yaml .
+
+# Source: blue-green/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: blue-green
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  rules:
+    - host: prod.example.com
+      http:
+        paths:
+          - path: /blue-green
+            backend:
+              serviceName: blue-green
+              servicePort: 80
+  tls:
+    - hosts:
+        - prod.example.com
+      secretName: blue-green-prod-tls
+
+	
+	
